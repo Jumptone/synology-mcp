@@ -18,7 +18,8 @@ classifiers = [
     "Topic :: System :: Systems Administration",
 ]
 dependencies = [
-    "mcp[cli]>=1.0.0",
+    # mcp 2.x renamed FastMCP -> MCPServer; this code targets the v1 API.
+    "mcp[cli]>=1.0.0,<2",
     "httpx>=0.27.0",
 ]
 

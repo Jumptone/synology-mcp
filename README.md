@@ -110,8 +110,13 @@ session, and re-authenticates automatically when it expires.
   QuickConnect, notifications, logs, security scan.
 - **Dashboards:** `get_overview` returns a complete snapshot in one call; the bundled
   [skill](skills/synology-nas) teaches the client to render it as a polished HTML dashboard.
-- **Safe by design:** state-changing tools are tagged `control`; destructive power
-  operations (reboot/shutdown/DSM update) are **disabled unless explicitly enabled**.
+- **Safe by design:** state-changing tools are tagged `control`. Irreversible and
+  data-exposing tools are **not registered at all** unless explicitly enabled, so the
+  AI client cannot see or call them:
+  `SYNOLOGY_ENABLE_DESTRUCTIVE=true` for `delete_item` / `delete_shared_folder` /
+  `create_share_link`, and `SYNOLOGY_ENABLE_POWER_CONTROL=true` for
+  `reboot_nas` / `shutdown_nas` / `install_dsm_update`.
+  With both off you get 65 read/monitor tools instead of 71.
 - **No hard-coded secrets:** all credentials come from environment variables / `.env`.
 
 ---

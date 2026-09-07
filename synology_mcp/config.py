@@ -56,6 +56,11 @@ TIMEOUT: float = float(os.getenv("SYNOLOGY_TIMEOUT", "30"))
 SESSION_NAME: str = os.getenv("SYNOLOGY_SESSION_NAME", "SynologyMCP")
 DEVICE_NAME: str = os.getenv("SYNOLOGY_DEVICE_NAME", "SynologyMCP")
 
+# Irreversible data operations (deleting files / shared folders) and outward-facing
+# ones (creating public share links) are not even registered as tools unless this
+# is explicitly turned on. See app.destructive_tool.
+ENABLE_DESTRUCTIVE: bool = _flag("SYNOLOGY_ENABLE_DESTRUCTIVE", False)
+
 # Destructive power operations (reboot / shutdown / install DSM update) are
 # disabled unless this is explicitly turned on.
 ENABLE_POWER_CONTROL: bool = _flag("SYNOLOGY_ENABLE_POWER_CONTROL", False)

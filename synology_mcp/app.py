@@ -9,7 +9,32 @@ from datetime import UTC, datetime
 
 from mcp.server.fastmcp import FastMCP
 
+from . import config
+
 mcp = FastMCP("Synology NAS")
+
+
+def destructive_tool():
+    """Register a tool only when ``SYNOLOGY_ENABLE_DESTRUCTIVE`` is on.
+
+    Irreversible operations (deleting files or shared folders) and ones that
+    expose data outside the NAS (public share links) stay *unregistered* when
+    the flag is off, so the client never sees them as available tools -- a
+    stronger guarantee than raising at call time.
+    """
+    if config.ENABLE_DESTRUCTIVE:
+        return mcp.tool()
+    return lambda func: func
+
+
+def power_tool():
+    """Register a tool only when ``SYNOLOGY_ENABLE_POWER_CONTROL`` is on.
+
+    Same idea as :func:`destructive_tool`, for reboot / shutdown / DSM update.
+    """
+    if config.ENABLE_POWER_CONTROL:
+        return mcp.tool()
+    return lambda func: func
 
 
 def ttl_cache(seconds: float):

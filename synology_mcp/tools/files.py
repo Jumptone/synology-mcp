@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 
 from .. import api
-from ..app import check, fmt, mcp, ts
+from ..app import check, destructive_tool, fmt, mcp, ts
 
 # Fields requested from File Station; must be sent as a JSON-array string.
 _FILE_ADDITIONAL = '["real_path","size","time","type","owner","perm"]'
@@ -207,7 +207,7 @@ async def copy_move_item(
                 "detail": result.get("data")})
 
 
-@mcp.tool()
+@destructive_tool()
 async def delete_item(paths: str, recursive: bool = True) -> str:
     """
     Delete files or folders. [control]
@@ -295,7 +295,7 @@ async def extract_archive(archive_path: str, dest_folder: str) -> str:
     return fmt({"extracted_to": dest_folder, "done": result.get("success")})
 
 
-@mcp.tool()
+@destructive_tool()
 async def create_share_link(path: str, password: str | None = None) -> str:
     """
     Create a public sharing link for a file or folder. [control]

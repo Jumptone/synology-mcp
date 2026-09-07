@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from .. import api
-from ..app import check, fmt, mcp, ts
+from ..app import check, destructive_tool, fmt, mcp, ts
 
 
 @mcp.tool()
@@ -74,7 +74,7 @@ async def create_shared_folder(name: str, volume: str = "/volume1", description:
     return fmt({"created": name, "volume": volume})
 
 
-@mcp.tool()
+@destructive_tool()
 async def delete_shared_folder(name: str) -> str:
     """
     Delete a shared folder (and its contents). [control]

@@ -48,3 +48,17 @@ required privilege.
 
 For least privilege, create a DSM user specifically for the server and grant only the
 applications and shared folders it needs. Avoid using the built-in `admin` account.
+
+
+## Disabled-by-default tools
+
+Two flags control whether risky tools are exposed to the AI client at all. When a
+flag is off the tools are never registered, so the model cannot see them in its
+tool list — it is not merely refused at call time.
+
+| Flag | Tools it unlocks |
+| --- | --- |
+| `SYNOLOGY_ENABLE_DESTRUCTIVE=true` | `delete_item`, `delete_shared_folder`, `create_share_link` |
+| `SYNOLOGY_ENABLE_POWER_CONTROL=true` | `reboot_nas`, `shutdown_nas`, `install_dsm_update` |
+
+With both off the server exposes 65 tools; with both on, 71.
