@@ -27,7 +27,7 @@ _client: httpx.AsyncClient | None = None
 _AUTH_ERRORS = {
     400: "no such account or incorrect password",
     401: "account disabled",
-    402: "permission denied",
+    402: "permission denied — often a SYNOLOGY_SESSION_NAME that DSM does not recognise as an installed application; leave it unset",
     403: "2FA (OTP) code required — run the bootstrap script to get a device token",
     404: "failed to authenticate 2FA code",
     406: "2FA enforced — a one-time OTP code is required to bootstrap",
@@ -56,9 +56,10 @@ async def _login() -> str:
         "method": "login",
         "account": config.USER,
         "passwd": config.PASSWORD,
-        "session": config.SESSION_NAME,
         "format": "sid",
     }
+    if config.SESSION_NAME:
+        params["session"] = config.SESSION_NAME
     # A trusted-device token avoids needing a fresh OTP on every login.
     if config.DEVICE_ID:
         params["device_id"] = config.DEVICE_ID
@@ -87,11 +88,11 @@ async def bootstrap_device_token(otp_code: str) -> str:
         "method": "login",
         "account": config.USER,
         "passwd": config.PASSWORD,
-        "session": config.SESSION_NAME,
         "format": "sid",
         "otp_code": otp_code,
         "enable_device_token": "yes",
         "device_name": config.DEVICE_NAME,
+        **({"session": config.SESSION_NAME} if config.SESSION_NAME else {}),
     })
     d = r.json()
     if not d.get("success"):

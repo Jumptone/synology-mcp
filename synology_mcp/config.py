@@ -53,7 +53,11 @@ DEVICE_ID: str = os.getenv("SYNOLOGY_DEVICE_ID", "")
 # ── Behaviour ──────────────────────────────────────────────────────────────────
 VERIFY_SSL: bool = _flag("SYNOLOGY_VERIFY_SSL", False)
 TIMEOUT: float = float(os.getenv("SYNOLOGY_TIMEOUT", "30"))
-SESSION_NAME: str = os.getenv("SYNOLOGY_SESSION_NAME", "SynologyMCP")
+# DSM resolves ``session`` against its list of installed applications and then
+# checks the account's privilege for it. An arbitrary name is not a real app, so
+# DSM rejects the login with error 402 for any non-administrator account.
+# Default to empty, which omits the parameter and lets DSM use a plain session.
+SESSION_NAME: str = os.getenv("SYNOLOGY_SESSION_NAME", "")
 DEVICE_NAME: str = os.getenv("SYNOLOGY_DEVICE_NAME", "SynologyMCP")
 
 # Irreversible data operations (deleting files / shared folders) and outward-facing
